@@ -37,21 +37,40 @@ public class IdleTutorialGame : MonoBehaviour
     public void Start() 
     {
         
-        clickUpgrade1Cost = 10;
-        clickUpgrade2Cost = 100;
-        productionUpgrade1Cost = 25;
-        coinsClickValue = 1;
-        productionUpgrade2Cost = 250;
-        productionUpgrade2Power = 5;
+        Load();
+    }
 
-    // Default Levels
+    public void Load()
+    {
+        coins = double.Parse(PlayerPrefs.GetString("coins", "0"));
+        clickUpgrade1Cost = double.Parse(PlayerPrefs.GetString("clickUpgrade1Cost", "10"));
+        clickUpgrade2Cost = double.Parse(PlayerPrefs.GetString("clickUpgrade2Cost", "100"));
+        productionUpgrade1Cost = double.Parse(PlayerPrefs.GetString("productionUpgrade1Cost", "25"));
+        productionUpgrade2Cost = double.Parse(PlayerPrefs.GetString("productionUpgrade2Cost", "250"));
+        coinsClickValue = double.Parse(PlayerPrefs.GetString("coinsClickValue", "0"));
+        productionUpgrade2Power = double.Parse(PlayerPrefs.GetString("productionUpgrade2Power", "5"));
 
-        clickUpgrade1Level = 0;
-        clickUpgrade2Level = 0;
-        productionUpgrade1Level = 0;
-        productionUpgrade2Level = 0;
-    
+        clickUpgrade1Level = PlayerPrefs.GetInt("clickUpgrade1Level", 0);
+        clickUpgrade2Level = PlayerPrefs.GetInt("clickUpgrade2Level", 0);
+        productionUpgrade1Level = PlayerPrefs.GetInt("productionUpgrade1Level", 0);
+        productionUpgrade2Level = PlayerPrefs.GetInt("productionUpgrade2Level", 0);
 
+    }
+
+    public void Save()
+    {
+        PlayerPrefs.SetString("coins", coins.ToString());
+        PlayerPrefs.SetString("coinsClickValue", coinsClickValue.ToString());
+        PlayerPrefs.SetString("clickUpgrade1Cost", clickUpgrade1Cost.ToString());
+        PlayerPrefs.SetString("clickUpgrade2Cost", clickUpgrade2Cost.ToString());
+        PlayerPrefs.SetString("productionUpgrade1Cost", productionUpgrade1Cost.ToString());
+        PlayerPrefs.SetString("productionUpgrade2Cost", productionUpgrade2Cost.ToString());
+        PlayerPrefs.SetString("productionUpgrade2Power", productionUpgrade2Power.ToString());
+
+        PlayerPrefs.SetInt("productionUpgrade1Level", productionUpgrade1Level);
+        PlayerPrefs.SetInt("productionUpgrade2Level", productionUpgrade2Level);
+        PlayerPrefs.SetInt("clickUpgrade1Level", clickUpgrade1Level);
+        PlayerPrefs.SetInt("clickUpgrade2Level", clickUpgrade2Level);
     }
 
     public void Update() 
@@ -176,10 +195,12 @@ public class IdleTutorialGame : MonoBehaviour
         clickUpgrade1Text.text = "Click Upgrade 1\nCost: " + clickUpgrade1CostString + "coins\nPower: +1 Click\nLevel: " + clickUpgrade1LevelString;
         clickUpgrade2Text.text = "Click Upgrade 2\nCost: " + clickUpgrade2CostString + "coins\nPower: +5 Click\nLevel: " + clickUpgrade2LevelString;
 
-        productionUpgrade1Text.text = "Production Upgrade 1\nCost: " + productionUpgrade1CostString + "coins\nPower: +1 coins/s\nLevel: " + productionUpgrade1CostString;
-        productionUpgrade2Text.text = "Production Upgrade 2\nCost: " + productionUpgrade2CostString + "coins\nPower: +5 coins/s\nLevel: " + productionUpgrade2CostString;
+        productionUpgrade1Text.text = "Production Upgrade 1\nCost: " + productionUpgrade1CostString + "coins\nPower: +1 coins/s\nLevel: " + productionUpgrade1LevelString;
+        productionUpgrade2Text.text = "Production Upgrade 2\nCost: " + productionUpgrade2CostString + "coins\nPower: +5 coins/s\nLevel: " + productionUpgrade2LevelString;
 
         coins += coinsPerSecond * Time.deltaTime;
+
+        Save();
 
     }
 
@@ -213,14 +234,14 @@ public class IdleTutorialGame : MonoBehaviour
     }
 
     public void BuyProductionUpgrade1()
-        {
-            if (coins >= productionUpgrade1Cost)
-            {
+   {
+        if (coins >= productionUpgrade1Cost)
+       {
                 productionUpgrade1Level++;
                 coins -= productionUpgrade1Cost;
                 productionUpgrade1Cost *= 1.07;
-            }
-        }
+       }
+    }
 
     public void BuyProductionUpgrade2()
         {
