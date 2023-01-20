@@ -43,6 +43,15 @@ public class IdleTutorialGame : MonoBehaviour
         coinsClickValue = 1;
         productionUpgrade2Cost = 250;
         productionUpgrade2Power = 5;
+
+    // Default Levels
+
+        clickUpgrade1Level = 0;
+        clickUpgrade2Level = 0;
+        productionUpgrade1Level = 0;
+        productionUpgrade2Level = 0;
+    
+
     }
 
     public void Update() 
