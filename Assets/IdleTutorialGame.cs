@@ -32,6 +32,17 @@ public class IdleTutorialGame : MonoBehaviour
     public double productionUpgrade2Power;
     public int productionUpgrade2Level;
 
+    // Episode 6
+
+    public Text gemsText;
+    public Text gemBoostText;
+    public Text gemsToGetText;
+
+    public double gems;
+    public double gemBoost;
+    public double gemsToGet;
+
+
 
     // Default prices
     public void Start() 
@@ -47,8 +58,10 @@ public class IdleTutorialGame : MonoBehaviour
         clickUpgrade2Cost = double.Parse(PlayerPrefs.GetString("clickUpgrade2Cost", "100"));
         productionUpgrade1Cost = double.Parse(PlayerPrefs.GetString("productionUpgrade1Cost", "25"));
         productionUpgrade2Cost = double.Parse(PlayerPrefs.GetString("productionUpgrade2Cost", "250"));
-        coinsClickValue = double.Parse(PlayerPrefs.GetString("coinsClickValue", "0"));
+        coinsClickValue = double.Parse(PlayerPrefs.GetString("coinsClickValue", "1"));
         productionUpgrade2Power = double.Parse(PlayerPrefs.GetString("productionUpgrade2Power", "5"));
+
+        gems = double.Parse(PlayerPrefs.GetString("gems", "0"));
 
         clickUpgrade1Level = PlayerPrefs.GetInt("clickUpgrade1Level", 0);
         clickUpgrade2Level = PlayerPrefs.GetInt("clickUpgrade2Level", 0);
@@ -67,6 +80,8 @@ public class IdleTutorialGame : MonoBehaviour
         PlayerPrefs.SetString("productionUpgrade2Cost", productionUpgrade2Cost.ToString());
         PlayerPrefs.SetString("productionUpgrade2Power", productionUpgrade2Power.ToString());
 
+        PlayerPrefs.SetString("gems", gems.ToString());
+
         PlayerPrefs.SetInt("productionUpgrade1Level", productionUpgrade1Level);
         PlayerPrefs.SetInt("productionUpgrade2Level", productionUpgrade2Level);
         PlayerPrefs.SetInt("clickUpgrade1Level", clickUpgrade1Level);
@@ -75,7 +90,14 @@ public class IdleTutorialGame : MonoBehaviour
 
     public void Update() 
     {
-        coinsPerSecond = productionUpgrade1Level + (productionUpgrade2Power * productionUpgrade2Level);
+        gemsToGet = (150 * System.Math.Sqrt(coins / 1e7));
+        gemBoost = (gems * 0.05) + 1;
+
+        gemsToGetText.text = "Prestige:\n+" + System.Math.Floor(gemsToGet).ToString("F0") + " Gems";
+        gemsText.text = "Gems: " + System.Math.Floor(gems).ToString("F0");
+        gemBoostText.text = gemBoost.ToString("F2") + "x boost";
+
+        coinsPerSecond = (productionUpgrade1Level + (productionUpgrade2Power * productionUpgrade2Level)) * gemBoost;
 
 
         if (coinsClickValue > 1000)
@@ -195,13 +217,35 @@ public class IdleTutorialGame : MonoBehaviour
         clickUpgrade1Text.text = "Click Upgrade 1\nCost: " + clickUpgrade1CostString + "coins\nPower: +1 Click\nLevel: " + clickUpgrade1LevelString;
         clickUpgrade2Text.text = "Click Upgrade 2\nCost: " + clickUpgrade2CostString + "coins\nPower: +5 Click\nLevel: " + clickUpgrade2LevelString;
 
-        productionUpgrade1Text.text = "Production Upgrade 1\nCost: " + productionUpgrade1CostString + "coins\nPower: +1 coins/s\nLevel: " + productionUpgrade1LevelString;
-        productionUpgrade2Text.text = "Production Upgrade 2\nCost: " + productionUpgrade2CostString + "coins\nPower: +5 coins/s\nLevel: " + productionUpgrade2LevelString;
+        productionUpgrade1Text.text = "Production Upgrade 1\nCost: " + productionUpgrade1Cost.ToString("F0") + "coins\nPower: +" + gemBoost.ToString("F2") + " coins/s\nLevel: " + productionUpgrade1LevelString;
+        productionUpgrade2Text.text = "Production Upgrade 2\nCost: " + productionUpgrade2Cost.ToString("F0") + "coins\nPower: +" + (productionUpgrade2Power * gemBoost).ToString("F2") + " coins/s\nLevel: " + productionUpgrade2LevelString;
 
         coins += coinsPerSecond * Time.deltaTime;
 
         Save();
 
+    }
+
+    // Prestige
+    public void Presitge()
+    {
+        if (coins > 1000)
+        {
+            coins = 0;
+            coinsClickValue = 1;
+            clickUpgrade1Cost = 10;
+            clickUpgrade2Cost = 100;
+            productionUpgrade1Cost = 25;
+            productionUpgrade2Cost = 250;
+            productionUpgrade2Power = 5;
+
+            productionUpgrade1Level = 0;
+            productionUpgrade2Level = 0;
+            clickUpgrade1Level = 0;
+            clickUpgrade2Level = 0;
+
+            gems += gemsToGet;
+        }
     }
 
     public void Click()
