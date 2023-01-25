@@ -296,7 +296,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 681471998}
         m_TargetAssemblyTypeName: IdleTutorialGame, Assembly-CSharp
-        m_MethodName: Presitge
+        m_MethodName: Prestige
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -648,7 +648,6 @@ GameObject:
   m_Component:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
-  - component: {fileID: 519420029}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -656,14 +655,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &519420029
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -858,6 +849,9 @@ MonoBehaviour:
   clickUpgrade2Text: {fileID: 1887024522}
   productionUpgrade1Text: {fileID: 1686406754}
   productionUpgrade2Text: {fileID: 55955106}
+  gemsText: {fileID: 1824339490}
+  gemBoostText: {fileID: 330788235}
+  gemsToGetText: {fileID: 1455250836}
   coins: 0
   coinsPerSecond: 0
   coinsClickValue: 0
@@ -866,6 +860,9 @@ MonoBehaviour:
   productionUpgrade1Cost: 0
   productionUpgrade2Cost: 0
   productionUpgrade2Power: 0
+  gems: 0
+  gemBoost: 0
+  gemsToGet: 0
   clickUpgrade1Level: 0
   clickUpgrade2Level: 0
   productionUpgrade1Level: 0
@@ -907,7 +904,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1221}
+  m_AnchoredPosition: {x: 0, y: 643.33}
   m_SizeDelta: {x: 160, y: 43.6216}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &840150556
