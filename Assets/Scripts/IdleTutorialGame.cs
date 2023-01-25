@@ -113,6 +113,7 @@ public class IdleTutorialGame : MonoBehaviour
 
     public void Update()  
     { 
+        //Gem Boost System
         gemsToGet = (150 * System.Math.Sqrt(coins / 1e7));
         gemBoost = (gems * 0.05) + 1;
 
@@ -232,10 +233,6 @@ public class IdleTutorialGame : MonoBehaviour
         else 
             productionUpgrade2LevelString = productionUpgrade2Level.ToString("F0");   
  
- 
- 
- 
- 
         //Value Exponents 
         clickUpgrade1Text.text = "Click Upgrade 1\nCost: " + clickUpgrade1CostString + "coins\nPower: +1 Click\nLevel: " + clickUpgrade1LevelString; 
         clickUpgrade2Text.text = "Click Upgrade 2\nCost: " + clickUpgrade2CostString + "coins\nPower: +5 Click\nLevel: " + clickUpgrade2LevelString; 
@@ -252,18 +249,8 @@ public class IdleTutorialGame : MonoBehaviour
     {
         if (coins > 1000)
         {
-        coins = 0;
-        clickUpgrade1Cost = 10; 
-        clickUpgrade2Cost = 100; 
-        productionUpgrade1Cost = 25; 
-        coinsClickValue = 1; 
-        productionUpgrade2Cost = 250; 
-        productionUpgrade2Power = 5; 
- 
-        clickUpgrade1Level = 0; 
-        clickUpgrade2Level = 0; 
-        productionUpgrade1Level = 0; 
-        productionUpgrade2Level = 0;
+
+        Reset();
 
         gems += gemsToGet;
         }
@@ -283,8 +270,6 @@ public class IdleTutorialGame : MonoBehaviour
             clickUpgrade1Cost *= 1.07; 
             coinsClickValue++; 
         } 
- 
- 
     } 
  
     public void BuyClickUpgrade2Cost() 
