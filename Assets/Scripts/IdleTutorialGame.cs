@@ -32,6 +32,11 @@ public class IdleTutorialGame : MonoBehaviour
     public int clickUpgrade2Level; 
     public int productionUpgrade1Level;     
     public int productionUpgrade2Level; 
+
+    public Image clickUpgrade1Bar;
+    public Image clickUpgrade2Bar;
+    public Image productionUpgrade1Bar;
+    public Image productionUpgrade2Bar;
  
  
     public void Start()  
@@ -242,9 +247,47 @@ public class IdleTutorialGame : MonoBehaviour
  
         coins += coinsPerSecond * Time.deltaTime; 
 
+        //progress bars
+
+
+        // Click Upgrade 1 Bar
+        if (coins / clickUpgrade1Cost < 0.01)
+            clickUpgrade1Bar.fillAmount = 0;
+        else if (coins / clickUpgrade1Cost < 0)    
+            clickUpgrade1Bar.fillAmount = 1;
+        else    
+            clickUpgrade1Bar.fillAmount = (float) (coins / clickUpgrade1Cost);
+
+        // Click Upgrade 2 Bar
+        if (coins / clickUpgrade2Cost < 0.01)
+            clickUpgrade2Bar.fillAmount = 0;
+        else if (coins / clickUpgrade2Cost < 0)    
+            clickUpgrade2Bar.fillAmount = 1;
+        else    
+            clickUpgrade2Bar.fillAmount = (float) (coins / clickUpgrade2Cost);
+
+        // Production Upgrade 1 Bar
+        if (coins / productionUpgrade1Cost < 0.01)
+            productionUpgrade1Bar.fillAmount = 0;
+        else if (coins / productionUpgrade1Cost < 0)    
+            productionUpgrade1Bar.fillAmount = 1;
+        else    
+            productionUpgrade1Bar.fillAmount = (float) (coins / productionUpgrade1Cost);
+
+        // Production Upgrade 2 Bar
+        if (coins / productionUpgrade2Cost < 0.01)
+            productionUpgrade2Bar.fillAmount = 0;
+        else if (coins / productionUpgrade2Cost < 0)    
+            productionUpgrade2Bar.fillAmount = 1;
+        else    
+            productionUpgrade2Bar.fillAmount = (float) (coins / productionUpgrade2Cost);
+
         Save();
     } 
 
+
+    //Button funcitons
+    
     public void Prestige()
     {
         if (coins > 1000)
