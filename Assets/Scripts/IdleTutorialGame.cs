@@ -18,14 +18,11 @@ public class IdleTutorialGame : MonoBehaviour
     public Text clickUpgrade1MaxText;
     public Text clickUpgrade2MaxText;
     public Text productionUpgrade1MaxText;
+    public Text productionUpgrade2MaxText;
 
     public double coins; 
     public double coinsPerSecond; 
     public double coinsClickValue; 
-    
-    
-    
-    public double productionUpgrade2Cost;
     public double productionUpgrade2Power;
     public double gems;
     public double gemBoost;
@@ -51,15 +48,9 @@ public class IdleTutorialGame : MonoBehaviour
     public void Load()
     {
         coins = double.Parse(PlayerPrefs.GetString("coins", "0"));
-
-         
-        
         coinsClickValue = double.Parse(PlayerPrefs.GetString("coinsClickValue", "1")); 
-        productionUpgrade2Cost = double.Parse(PlayerPrefs.GetString("productionUpgrade2Cost", "250")); 
         productionUpgrade2Power = double.Parse(PlayerPrefs.GetString("productionUpgrade2Power", "5")); 
-
         gems = double.Parse(PlayerPrefs.GetString("gems", "0"));
-
         clickUpgrade1Level = PlayerPrefs.GetInt("clickUpgrade1Level", 0); 
         clickUpgrade2Level = PlayerPrefs.GetInt("clickUpgrade2Level", 0);  
         productionUpgrade1Level = PlayerPrefs.GetInt("productionUpgrade1Level", 0); 
@@ -70,14 +61,8 @@ public class IdleTutorialGame : MonoBehaviour
     {
         PlayerPrefs.SetString("coins", coins.ToString());
         PlayerPrefs.SetString("coinsClickValue", coinsClickValue.ToString());
-        
-        
-        
-        PlayerPrefs.SetString("productionUpgrade2Cost", productionUpgrade2Cost.ToString());
         PlayerPrefs.SetString("productionUpgrade2Power", productionUpgrade2Power.ToString());
-
         PlayerPrefs.SetString("gems", gems.ToString());
-
         PlayerPrefs.SetInt("clickUpgrade1Level", clickUpgrade1Level);
         PlayerPrefs.SetInt("clickUpgrade2Level", clickUpgrade2Level);
         PlayerPrefs.SetInt("productionUpgrade1Level", productionUpgrade1Level);
@@ -92,7 +77,7 @@ public class IdleTutorialGame : MonoBehaviour
          
         
         coinsClickValue = 1; 
-        productionUpgrade2Cost = 250; 
+         
         productionUpgrade2Power = 5; 
  
         clickUpgrade1Level = 0; 
@@ -134,6 +119,15 @@ public class IdleTutorialGame : MonoBehaviour
         var n = System.Math.Floor(System.Math.Log((c * (r - 1)) / (b * System.Math.Pow(r, k)) +1, r));
         return n;
     }
+        public double BuyProductionUpgrade2MaxCount()
+    {
+        var b = 250;
+        var c = coins;
+        var r = 1.09;
+        var k = productionUpgrade2Level;
+        var n = System.Math.Floor(System.Math.Log((c * (r - 1)) / (b * System.Math.Pow(r, k)) +1, r));
+        return n;
+    }
 
 
 
@@ -172,7 +166,6 @@ public class IdleTutorialGame : MonoBehaviour
  
         //* Click Updgrade 1 Cost and Level exponent system 
         string clickUpgrade1CostString; 
-        //! Below Var needs to be under the cost string of the other buttons
         var clickUpgrade1Cost = 10 * System.Math.Pow(1.07, clickUpgrade1Level);
         if (clickUpgrade1Cost > 1000) 
         { 
@@ -244,6 +237,7 @@ public class IdleTutorialGame : MonoBehaviour
         //* Production Upgrade 2 Cost and Level exponent system 
  
         string productionUpgrade2CostString; 
+        var productionUpgrade2Cost = 250 * System.Math.Pow(1.09, productionUpgrade2Level);
         if (productionUpgrade2Cost > 1000) 
         { 
             var exponent = (System.Math.Floor(System.Math.Log10(System.Math.Abs(productionUpgrade2Cost)))); 
@@ -264,8 +258,9 @@ public class IdleTutorialGame : MonoBehaviour
             productionUpgrade2LevelString = productionUpgrade2Level.ToString("F0");   
  
         //*Value Exponents 
-        clickUpgrade1Text.text = "Click Upgrade 1\nCost: " + clickUpgrade1CostString + "coins\nPower: +1 Click\nLevel: " + clickUpgrade1LevelString; 
-        clickUpgrade2Text.text = "Click Upgrade 2\nCost: " + clickUpgrade2CostString + "coins\nPower: +5 Click\nLevel: " + clickUpgrade2LevelString; 
+        //todo figure out how to add prestige to click upgrade
+        clickUpgrade1Text.text = "Click Upgrade 1\nCost: " + clickUpgrade1CostString + " coins\nPower: +1 Click\nLevel: " + clickUpgrade1LevelString; 
+        clickUpgrade2Text.text = "Click Upgrade 2\nCost: " + clickUpgrade2CostString + " coins\nPower: +5 Click\nLevel: " + clickUpgrade2LevelString; 
  
         productionUpgrade1Text.text = "Production Upgrade 1\nCost: " + productionUpgrade1CostString + "coins\nPower: +" + gemBoost.ToString("F2") + "coins/s\nLevel: " + productionUpgrade1LevelString; 
         productionUpgrade2Text.text = "Production Upgrade 2\nCost: " + productionUpgrade2CostString + "coins\nPower: +" + (productionUpgrade2Power * gemBoost).ToString("F2") + "coins/s\nLevel: " + productionUpgrade2LevelString; 
@@ -315,6 +310,8 @@ public class IdleTutorialGame : MonoBehaviour
         clickUpgrade2MaxText.text = "Buy Max (" + BuyClickUpgrade2MaxCount() + ")";
 
         productionUpgrade1MaxText.text = "Buy Max (" + BuyProductionUpgrade1MaxCount() + ")";
+
+        productionUpgrade2MaxText.text = "Buy Max (" + BuyProductionUpgrade2MaxCount() + ")";
 
         Save();
     } 
@@ -381,7 +378,7 @@ public class IdleTutorialGame : MonoBehaviour
             coinsClickValue += 5; 
         } 
     } 
-
+    
     public void BuyClickUpgrade2Max()
     {
         var b = 100;
@@ -396,7 +393,7 @@ public class IdleTutorialGame : MonoBehaviour
         {
             clickUpgrade2Level += (int)n;
             coins -= cost;
-            coinsClickValue += n;
+            coinsClickValue += n * 5;
         }
     }
  
@@ -431,13 +428,32 @@ public class IdleTutorialGame : MonoBehaviour
  
     public void BuyProductionUpgrade2() 
         { 
-            if (coins >= productionUpgrade2Cost) 
+            var cost = 250 * System.Math.Pow(1.09, productionUpgrade2Level);
+            if (coins >= cost) 
             { 
                 productionUpgrade2Level++; 
-                coins -= productionUpgrade2Cost; 
-                productionUpgrade2Cost *= 1.09; 
+                coins -= cost; 
+                
             } 
         } 
+
+        public void BuyProductionUpgrade2Max()
+    {
+        var b = 250;
+        var c = coins;
+        var r = 1.09;
+        var k = productionUpgrade2Level;
+        var n = System.Math.Floor(System.Math.Log((c * (r - 1)) / (b * System.Math.Pow(r, k)) +1, r));
+
+        var cost = b * (System.Math.Pow(r, k) * (System.Math.Pow(r, n) - 1) / (r - 1));
+
+        if (coins >= cost)
+        {
+            productionUpgrade2Level += (int)n;
+            coins -= cost;
+            
+        }
+    } 
  
 } 
 
