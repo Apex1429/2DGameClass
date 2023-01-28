@@ -41,6 +41,7 @@ public class IdleTutorialGame : MonoBehaviour
  
     public void Start()  
     { 
+        Application.targetFrameRate = 60;
         Load();
 
     } 
@@ -74,22 +75,17 @@ public class IdleTutorialGame : MonoBehaviour
     public void Reset()
     {
         coins = 0;
-         
-        
         coinsClickValue = 1; 
-         
         productionUpgrade2Power = 5; 
- 
         clickUpgrade1Level = 0; 
         clickUpgrade2Level = 0; 
         productionUpgrade1Level = 0; 
         productionUpgrade2Level = 0;
-
         gems = 0;
         gemBoost = 0;
     }
 
-        //todo creat this for other upgrades
+    
         public double BuyClickUpgrade1MaxCount()
     {
         var b = 10;
@@ -136,33 +132,16 @@ public class IdleTutorialGame : MonoBehaviour
         //*Gem Boost System
         gemsToGet = (150 * System.Math.Sqrt(coins / 1e7));
         gemBoost = (gems * 0.05) + 1;
-
+        //todo Prestige starts to show +1 at around 400 coins. Fix
         gemsToGetText.text = "Prestige:\n+" + System.Math.Floor(gemsToGet).ToString("F0") + " Gems";
         gemsText.text = "Gems: " + System.Math.Floor(gems).ToString("F0");
         gemBoostText.text = gemBoost.ToString("F2") + "x boost";
 
         coinsPerSecond = productionUpgrade1Level + (productionUpgrade2Power * productionUpgrade2Level); 
  
- 
-        if (coinsClickValue > 1000) 
-        { 
-            var exponent = (System.Math.Floor(System.Math.Log10(System.Math.Abs(coinsClickValue)))); 
-            var mantissa = (coinsClickValue / System.Math.Pow(10, exponent)); 
-            clickValueText.text = "Click\n+" + mantissa.ToString("F2") + "e" + exponent + " Coins"; 
-        } 
-        else 
-            clickValueText.text = "Click\n+" + coinsClickValue.ToString("F0") + " Coins"; 
- 
-        if (coins > 1000) 
-        { 
-            var exponent = (System.Math.Floor(System.Math.Log10(System.Math.Abs(coins)))); 
-            var mantissa = (coins / System.Math.Pow(10, exponent)); 
-            coinsText.text = "Coins: " + mantissa.ToString("F2") + "e" + exponent; 
-        }     
-        else 
-            coinsText.text = "Coins: " + coins.ToString("F0"); 
- 
-            coinsPerSecText.text = coinsPerSecond.ToString("F0") + " coins/s"; 
+        clickValueText.text = "Click\n+" + NotationMethod(coinsClickValue, y: "F0") + " Coins";
+        coinsText.text = "Coins: " + NotationMethod(coins, y: "F0");
+        coinsPerSecText.text = coinsPerSecond.ToString("F0") + " coins/s"; 
  
         //* Click Updgrade 1 Cost and Level exponent system 
         string clickUpgrade1CostString; 
@@ -259,12 +238,15 @@ public class IdleTutorialGame : MonoBehaviour
  
         //*Value Exponents 
         //todo figure out how to add prestige to click upgrade
-        clickUpgrade1Text.text = "Click Upgrade 1\nCost: " + clickUpgrade1CostString + " coins\nPower: +1 Click\nLevel: " + clickUpgrade1LevelString; 
-        clickUpgrade2Text.text = "Click Upgrade 2\nCost: " + clickUpgrade2CostString + " coins\nPower: +5 Click\nLevel: " + clickUpgrade2LevelString; 
+        clickUpgrade1Text.text = "Click Upgrade 1\nCost: " + clickUpgrade1CostString + " coins\nPower: +" + gemBoost.ToString("F2") + "Click\nLevel: " + clickUpgrade1LevelString; 
+        clickUpgrade2Text.text = "Click Upgrade 2\nCost: " + clickUpgrade2CostString + " coins\nPower: +" + (productionUpgrade2Power * gemBoost).ToString("F2") + "Click\nLevel: " + clickUpgrade2LevelString; 
  
         productionUpgrade1Text.text = "Production Upgrade 1\nCost: " + productionUpgrade1CostString + "coins\nPower: +" + gemBoost.ToString("F2") + "coins/s\nLevel: " + productionUpgrade1LevelString; 
         productionUpgrade2Text.text = "Production Upgrade 2\nCost: " + productionUpgrade2CostString + "coins\nPower: +" + (productionUpgrade2Power * gemBoost).ToString("F2") + "coins/s\nLevel: " + productionUpgrade2LevelString; 
- 
+            
+
+
+
         coins += coinsPerSecond * Time.deltaTime; 
 
         //*progress bars
@@ -317,6 +299,30 @@ public class IdleTutorialGame : MonoBehaviour
     } 
 
 
+        public string NotationMethod(double x, string y)
+        {
+        if (x > 1000)
+        {
+            var exponent = System.Math.Floor(System.Math.Log10(System.Math.Abs(x))); 
+            var mantissa = x / System.Math.Pow(10, exponent); 
+            return mantissa.ToString( format: "F2") + "e" + exponent;
+        } 
+            return x.ToString(y);
+
+        }
+
+        public string NotationMethod(float x, string y)
+        {
+        if (x > 1000)
+        {
+            var exponent = Mathf.Floor(Mathf.Log10(Mathf.Abs(x))); 
+            var mantissa = x / Mathf.Pow(10, exponent); 
+            return mantissa.ToString( format: "F2") + "e" + exponent;
+        } 
+            return x.ToString(y);
+
+        }
+
 
     //*Button funcitons
     
@@ -324,10 +330,8 @@ public class IdleTutorialGame : MonoBehaviour
     {
         if (coins > 1000)
         {
-
-        Reset();
-
         gems += gemsToGet;
+        Reset();
         }
     }
  
