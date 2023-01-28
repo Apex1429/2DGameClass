@@ -330,14 +330,21 @@ public class IdleTutorialGame : MonoBehaviour
     {
         if (coins > 1000)
         {
-        gems += gemsToGet;
         Reset();
+        gems += gemsToGet;
+        
         }
     }
  
     public void Click() 
     { 
         coins += coinsClickValue; 
+    } 
+
+    //* For Testing Only
+        public void Rich() 
+    { 
+        coins = 1000;
     } 
  
     public void BuyClickUpgrade1() 
