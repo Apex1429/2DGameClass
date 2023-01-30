@@ -32,19 +32,44 @@ public class IdleTutorialGame : MonoBehaviour
     public int clickUpgrade2Level; 
     public int productionUpgrade1Level;     
     public int productionUpgrade2Level; 
+    public int tabSwitcher;
 
     public Image clickUpgrade1Bar;
     public Image clickUpgrade2Bar;
     public Image productionUpgrade1Bar;
     public Image productionUpgrade2Bar;
+
+    public CanvasGroup mainMenuGroup;
+    public CanvasGroup upgradesGroup;
  
  
     public void Start()  
     { 
         Application.targetFrameRate = 60;
+
+        CanvasGroupChanger(true, mainMenuGroup);
+        CanvasGroupChanger(false, upgradesGroup);
+
+        tabSwitcher = 0;
+
         Load();
 
     } 
+    //todo study this. Creating methods should help clean the code drastically.
+    public void CanvasGroupChanger(bool x, CanvasGroup y)
+    {
+        if (x)
+        {
+            y.alpha = 1;
+            y.interactable = true;
+            y.blocksRaycasts = true;
+            return;
+        }
+        y.alpha = 0;
+        y.interactable = false;
+        y.blocksRaycasts = false;
+    }
+
 
     public void Load()
     {
@@ -237,7 +262,7 @@ public class IdleTutorialGame : MonoBehaviour
             productionUpgrade2LevelString = productionUpgrade2Level.ToString("F0");   
  
         //*Value Exponents 
-        //todo figure out how to add prestige to click upgrade
+        
         clickUpgrade1Text.text = "Click Upgrade 1\nCost: " + clickUpgrade1CostString + " coins\nPower: +" + gemBoost.ToString("F2") + "Click\nLevel: " + clickUpgrade1LevelString; 
         clickUpgrade2Text.text = "Click Upgrade 2\nCost: " + clickUpgrade2CostString + " coins\nPower: +" + (productionUpgrade2Power * gemBoost).ToString("F2") + "Click\nLevel: " + clickUpgrade2LevelString; 
  
@@ -465,6 +490,23 @@ public class IdleTutorialGame : MonoBehaviour
             
         }
     } 
+    //todo important for switching windows
+    public void ChagneTabs(string id)
+    {
+        switch (id)
+        {
+            case "Upgrades":
+                CanvasGroupChanger(false, mainMenuGroup);
+                CanvasGroupChanger(true, upgradesGroup);
+               
+                break;
+            case "Main":
+                CanvasGroupChanger(true, mainMenuGroup);
+                CanvasGroupChanger(false, upgradesGroup);
+   
+                break;
+        }
+    }
  
 } 
 
